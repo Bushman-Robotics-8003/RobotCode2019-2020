@@ -39,4 +39,10 @@ Once the FRC radio is configured:
     3) Once the driver station shows green next to communications open a browser
     4) In the address bar type "172.22.11.2" and press enter, This should bring you to a configuration page for the RoboRIO
     5) This should bring you to a configuration page for the RoboRIO
-    // To be continued when I can see what's going on
+    6) On the left panel there should be two buttons, click the one that looks like a cable
+    7) Look for the dropdown for "Configure IPv4 Address" and select "static"
+    8) Then inside the box labled "IPv4 Address" type "10.80.3.2"
+    9) Click the save button at the top of the page
+    10) Open the wifi connections tab and connect to the network called "8003"
+    11) Once connected the driver station should connect to robot automatically
+    12) If this is not happening make sure that the Team Number box in the settings tab has "8003" typed into it
