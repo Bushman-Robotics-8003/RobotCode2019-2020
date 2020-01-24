@@ -1,0 +1,42 @@
+##############################################
+#                                            #
+#  How to setup and configure the FRC radio  #
+#                                            #
+##############################################
+
+In order to setup the FRC radio, you need to first have the "FRC Radio Configuration Utility" installed as well
+as "Java Runtime Engine" (JRE)
+
+Once FRC radio configuration utility is installed run it and do the following:
+    1) Select "Ethernet" from the dropdown then click "OK"
+    2) Put the four digit team number in the "Team Number" box
+    3) Make sure the "Radio" box says "OpenMesh"
+    4) select "2.4GHz Access Point" from the "Mode" dropdown
+    5) Leave all other box as their defualt
+    6) Make sure FRC radio is NOT plugged into the computer or a power source
+    7) Click the "Load Firmware" button
+    8) Wait for the dialog box to give three instructions
+    9) Once you see the instructions plug the ethernet cord into the FRC radio in the port next to the power port
+    10) Plug the other end of the ethernet cord into the computer
+    11) plug the power cord into the FRC radio
+    12) The dialog box should recognize the radio after a few seconds, from here just wait until the dialog box says
+        something along the lines of "Firmware installed successfully"
+    13) Once you see that message click ok and then click the Configure button
+    14) This process should take about 1 minute and does not require any user input
+    15) Once the dialog box says something along the lines of "Configuration complete", the FRC radio is not configured and 
+        ready to be used
+
+
+##############################################
+#                                            #
+#  Connecting driver station to FRC radio    #
+#                                            #
+##############################################
+
+Once the FRC radio is configured:
+    1) Now you need to give the RoboRIO a static IP address, this is basically a way of identifying the RoboRIO
+    2) Connect the RoboRIO to the computer via USB
+    3) Once the driver station shows green next to communications open a browser
+    4) In the address bar type "172.22.11.2" and press enter, This should bring you to a configuration page for the RoboRIO
+    5) This should bring you to a configuration page for the RoboRIO
+    // To be continued when I can see what's going on
