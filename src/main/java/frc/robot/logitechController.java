@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class logitechControlller{
+public class logitechController{
 	static Joystick controller = new Joystick(0);
 	static double fullSpeed = 1.0;
 

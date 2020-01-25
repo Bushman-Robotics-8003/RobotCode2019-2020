@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		// movement is handled by the logitech controller class
-		logitechControlller.controlDrive();
+		logitechController.controlDrive();
 	}
 
 	/**
