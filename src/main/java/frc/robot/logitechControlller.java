@@ -8,7 +8,7 @@ public class logitechControlller{
 
 	// handles the driving of the robot
 	public static void controlDrive() {
-		// the different input method on the controller
+	    // the different input method on the controller
 		// joysticks, triggers, etc.
 		double leftStickY = controller.getRawAxis(1);
 		double rightStickX = controller.getRawAxis(4);
