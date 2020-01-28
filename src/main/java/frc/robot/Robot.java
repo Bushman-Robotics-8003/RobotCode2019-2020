@@ -11,7 +11,9 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.Scheduler;
 // import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.DriveTrain;
 
 
 
@@ -29,6 +31,9 @@ public class Robot extends TimedRobot {
 	private String m_autoSelected;
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+	public static OI oi = null;
+	public static DriveTrain driveTrain = null;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -39,6 +44,9 @@ public class Robot extends TimedRobot {
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 		CameraServer.getInstance().startAutomaticCapture();
+
+		oi = new OI();
+		driveTrain = new DriveTrain();
 	}
 
 	/**
@@ -90,6 +98,8 @@ public class Robot extends TimedRobot {
 		//clock.reset();
 		//clock.start();
 
+		// remember to add scheduler line when this starts
+
 
 	}
 
@@ -98,7 +108,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		logitechController.controlDrive();
+		Scheduler.getInstance().run();
 	}
 
 	/**

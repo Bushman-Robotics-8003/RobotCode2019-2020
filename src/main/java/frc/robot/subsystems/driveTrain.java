@@ -1,80 +1,57 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import java.lang.Math;
-
-public class driveTrain {
-
-    // perhaps try this
-    // left side motors
-    static WPI_VictorSPX masterMotorLeft = new WPI_VictorSPX(0);
-    static WPI_VictorSPX slaveMotorLeft = new WPI_VictorSPX(1);
-
-    // right side motors
-    static WPI_VictorSPX masterMotorRight = new WPI_VictorSPX(2);
-    static WPI_VictorSPX slaveMotorRight = new WPI_VictorSPX(3);
-
-    static SpeedControllerGroup driveTrainLeft = new SpeedControllerGroup(masterMotorLeft, slaveMotorLeft);
-    static SpeedControllerGroup driveTrainRight = new SpeedControllerGroup(masterMotorRight, slaveMotorRight);
-
-    static DifferentialDrive drive = new DifferentialDrive(driveTrainLeft, driveTrainRight);
-
-    // original working code //
-    // left side motors
-    // static WPI_VictorSPX masterMotorLeft = new WPI_VictorSPX(0);
-    // static WPI_VictorSPX slaveMotorLeft = new WPI_VictorSPX(1);
+// import java.lang.Math;
+import frc.robot.commands.Drive;
 
 
-    // right side motors
-    // static WPI_VictorSPX masterMotorRight = new WPI_VictorSPX(2);
-    // static WPI_VictorSPX slaveMotorRight = new WPI_VictorSPX(3);
-    // original working code //
-    
-    
-    public driveTrain() {
-        
-    }
+/**
+ * Add your docs here.
+ */
+public class DriveTrain extends Subsystem {
+  // Put methods for controlling this subsystem
+  // here. Call these from Commands.
+  static WPI_VictorSPX masterMotorLeft = null;
+  static WPI_VictorSPX slaveMotorLeft = null;
 
-    public static void move(double speed, double turn) {
+  static WPI_VictorSPX masterMotorRight = null;
+  static WPI_VictorSPX slaveMotorRight = null;
 
-        // perhaps try this
-        // not sure if turn will actually turn the robot
-        // and supposedly aracdeDrive will negate the right side motors
-        drive.arcadeDrive(speed, turn);
+  static DifferentialDrive drive = null;
 
-        // original working code //
-		// default values for right/left turn
-		// double actualRightTurn = 1;
-		// double actualLeftTurn = 1;
+  static double speedLimiter = 0.5;
 
-		// // assign the turn multiplier
-		// if (Math.signum(turn) == 1.0) {
-		// 	actualRightTurn = 1.5 - turn;
-		// } else if (Math.signum(turn) == -1.0) {
-		// 	actualLeftTurn = 1.5 - (turn * -1);
-		// }
+  public DriveTrain() {
+    masterMotorLeft = new WPI_VictorSPX(0);
+    slaveMotorLeft = new WPI_VictorSPX(1);
 
-		// // set speed
-		// masterMotorLeft.set(speed * actualLeftTurn);
-		// masterMotorRight.set(-speed * actualRightTurn);
+    masterMotorRight = new WPI_VictorSPX(2);
+    slaveMotorRight = new WPI_VictorSPX(3);
 
-		// // slave motors follow
-		// slaveMotorLeft.follow(masterMotorLeft);
-        // slaveMotorRight.follow(masterMotorRight);
-        // original working code //
-	}
+    SpeedControllerGroup driveTrainLeft = new SpeedControllerGroup(masterMotorLeft, slaveMotorLeft);
+    SpeedControllerGroup driveTrainRight = new SpeedControllerGroup(masterMotorRight, slaveMotorRight);
 
-	/**
-	 * this method allows the robot to rotate without moving from its current position
-	 * @param speed represents the speed that the motor will be set to
-	 */
-	public static void rotate(double speed) {
-		masterMotorLeft.set(speed);
-		masterMotorRight.set(speed);
+    drive = new DifferentialDrive(driveTrainLeft, driveTrainRight);
+  }
 
-		slaveMotorLeft.follow(masterMotorLeft);
-		slaveMotorRight.follow(masterMotorRight);
-	}
+  @Override
+  public void initDefaultCommand() {
+    // Set the default command for a subsystem here.
+    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new Drive());
+  }
+
+  public void drive(double speed, double turn) {
+    drive.arcadeDrive(speed * speedLimiter, turn * speedLimiter);
+  }
 }
