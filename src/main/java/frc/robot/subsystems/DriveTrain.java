@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.RobotMap;
 import frc.robot.commands.Drive;
 
 
@@ -31,11 +32,11 @@ public class DriveTrain extends Subsystem {
   private static double speedLimiter = 0.5;
 
   public DriveTrain() {
-    masterMotorLeft = new WPI_VictorSPX(0);
-    slaveMotorLeft = new WPI_VictorSPX(1);
+    masterMotorLeft = new WPI_VictorSPX(RobotMap.masterMotorLeftId);
+    slaveMotorLeft = new WPI_VictorSPX(RobotMap.slaveMotorLeftId);
 
-    masterMotorRight = new WPI_VictorSPX(2);
-    slaveMotorRight = new WPI_VictorSPX(3);
+    masterMotorRight = new WPI_VictorSPX(RobotMap.masterMotorRightId);
+    slaveMotorRight = new WPI_VictorSPX(RobotMap.slaveMotorRightId);
 
     SpeedControllerGroup driveTrainLeft = new SpeedControllerGroup(masterMotorLeft, slaveMotorLeft);
     SpeedControllerGroup driveTrainRight = new SpeedControllerGroup(masterMotorRight, slaveMotorRight);
