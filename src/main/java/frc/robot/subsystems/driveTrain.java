@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-// import java.lang.Math;
 import frc.robot.commands.Drive;
 
 
@@ -21,13 +20,13 @@ import frc.robot.commands.Drive;
 public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  static WPI_VictorSPX masterMotorLeft = null;
-  static WPI_VictorSPX slaveMotorLeft = null;
+  static WPI_VictorSPX masterMotorLeft;
+  static WPI_VictorSPX slaveMotorLeft;
 
-  static WPI_VictorSPX masterMotorRight = null;
-  static WPI_VictorSPX slaveMotorRight = null;
+  static WPI_VictorSPX masterMotorRight;
+  static WPI_VictorSPX slaveMotorRight;
 
-  static DifferentialDrive drive = null;
+  static DifferentialDrive drive;
 
   static double speedLimiter = 0.5;
 
