@@ -20,15 +20,15 @@ import frc.robot.commands.Drive;
 public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  static WPI_VictorSPX masterMotorLeft;
-  static WPI_VictorSPX slaveMotorLeft;
+  private static WPI_VictorSPX masterMotorLeft;
+  private static WPI_VictorSPX slaveMotorLeft;
 
-  static WPI_VictorSPX masterMotorRight;
-  static WPI_VictorSPX slaveMotorRight;
+  private static WPI_VictorSPX masterMotorRight;
+  private static WPI_VictorSPX slaveMotorRight;
 
-  static DifferentialDrive drive;
+  private static DifferentialDrive drive;
 
-  static double speedLimiter = 0.5;
+  private static double speedLimiter = 0.5;
 
   public DriveTrain() {
     masterMotorLeft = new WPI_VictorSPX(0);
