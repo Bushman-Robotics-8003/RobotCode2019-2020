@@ -12,6 +12,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Drive extends Command {
+
   public Drive() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -28,7 +29,7 @@ public class Drive extends Command {
   protected void execute() {
     double moveSpeed = -Robot.oi.controller.getRawAxis(RobotMap.leftStickYAxisId);
     double turn = Robot.oi.controller.getRawAxis(RobotMap.rightStickXAxisId);
-    Robot.driveTrain.drive(moveSpeed, turn);
+    Robot.driveTrain.curvatureDrive(moveSpeed, turn);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -40,13 +41,11 @@ public class Drive extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.driveTrain.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

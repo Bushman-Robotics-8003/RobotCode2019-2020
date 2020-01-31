@@ -45,8 +45,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Auto choices", m_chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 
-		oi = new OI();
 		driveTrain = new DriveTrain();
+		oi = new OI();
 	}
 
 	/**
