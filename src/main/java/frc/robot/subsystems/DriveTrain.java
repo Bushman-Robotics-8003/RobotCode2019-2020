@@ -54,4 +54,8 @@ public class DriveTrain extends Subsystem {
   public void drive(double speed, double turn) {
     drive.arcadeDrive(speed * speedLimiter, turn * speedLimiter);
   }
+
+  public void curvatureDrive(double speed, double turn) {
+    drive.curvatureDrive(speed, turn, true);
+  }
 }

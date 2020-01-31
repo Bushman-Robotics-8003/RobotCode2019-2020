@@ -16,4 +16,5 @@ public class RobotMap {
 	// Controller triggers and buttons
 	public static final int leftTriggerId = 2;
 	public static final int rightTriggerId = 3;
+	public static final int xButtonId = 3;
 }
