@@ -58,4 +58,8 @@ public class DriveTrain extends Subsystem {
   public void curvatureDrive(double speed, double turn) {
     drive.curvatureDrive(speed, turn, true);
   }
+
+  public void stop() {
+    drive.stopMotor();
+  }
 }
