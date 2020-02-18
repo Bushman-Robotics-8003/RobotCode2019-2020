@@ -7,16 +7,15 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
-public class Drive extends Command {
-
-  public Drive() {
+public class IntakeOut extends Command {
+  public IntakeOut() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.driveTrain);
+    requires(Robot.intake);
   }
 
   // Called just before this Command runs the first time
@@ -27,9 +26,8 @@ public class Drive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double moveSpeed = -Robot.oi.controller.getRawAxis(RobotMap.leftStickYAxisId);
-    double turn = Robot.oi.controller.getRawAxis(RobotMap.rightStickXAxisId);
-    Robot.driveTrain.curvatureDrive(moveSpeed, turn);
+    Robot.intake.intakeOut();
+    SmartDashboard.putString("Intake", "OUT");
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,7 +39,8 @@ public class Drive extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.driveTrain.stopMotors();
+    SmartDashboard.putString("Intake", "STOPPED");
+    Robot.intake.stopMotor();
   }
 
   // Called when another command which requires one or more of the same

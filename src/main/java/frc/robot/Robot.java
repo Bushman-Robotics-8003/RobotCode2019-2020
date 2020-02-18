@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import frc.robot.commands.DriveAuto;
+import edu.wpi.first.wpilibj.command.Command;
 // import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.*;
 
 
 
@@ -31,8 +34,11 @@ public class Robot extends TimedRobot {
 	private String m_autoSelected;
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-	public static OI oi = null;
-	public static DriveTrain driveTrain = null;
+	public static DriveTrain driveTrain;
+	public static Intake intake;
+	public static Shooter shooter;
+	public static OI oi;
+	private Command autonomousCommand;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -46,7 +52,13 @@ public class Robot extends TimedRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 
 		driveTrain = new DriveTrain();
+		intake = new Intake();
+		shooter = new Shooter();
 		oi = new OI();
+		autonomousCommand = new DriveAuto(1.0, 0.5, 0.5, 0.1, 20);
+
+		driveTrain.resetEncoders();
+
 	}
 
 	/**
@@ -78,6 +90,9 @@ public class Robot extends TimedRobot {
 		m_autoSelected = m_chooser.getSelected();
 		// m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
 		System.out.println("Auto selected: " + m_autoSelected);
+
+		driveTrain.resetEncoders();
+		if (autonomousCommand != null) autonomousCommand.start();
 	}
 
 	/**
@@ -99,8 +114,17 @@ public class Robot extends TimedRobot {
 		//clock.start();
 
 		// remember to add scheduler line when this starts
+		Scheduler.getInstance().run();
+		SmartDashboard.putString("Left Motor Speed", Double.toString(driveTrain.getMasterMotorLeft().get()));
+		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
+		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
+		SmartDashboard.putString("Left Encoder", Double.toString(driveTrain.getLeftEncoderDistance()));
 
+	}
 
+	@Override
+	public void teleopInit() {
+		driveTrain.resetEncoders();
 	}
 
 	/**
@@ -109,6 +133,11 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		SmartDashboard.putString("Left Motor Speed", Double.toString(driveTrain.getMasterMotorLeft().get()));
+		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
+		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
+		SmartDashboard.putString("Left Encoder", Double.toString(driveTrain.getLeftEncoderDistance()));
+
 	}
 
 	/**
@@ -116,6 +145,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-
+		LiveWindow
 	}
 }
