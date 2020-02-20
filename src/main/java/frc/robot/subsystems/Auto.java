@@ -7,7 +7,10 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.Robot;
+
 
 /**
  * Add your docs here.
@@ -17,34 +20,40 @@ public class Auto extends PIDSubsystem {
   /**
    * Add your docs here.
    */
-  public Auto(double setpoint) {
+
+
+  public Auto(PIDController controller) {
     // Intert a subsystem name and PID values here
-    super("Auto", 1, 2, 3);
+    super(controller);
+
     // Use these to get going:
     // setSetpoint() - Sets where the PID controller should move the system
     // to
     // enable() - Enables the PID controller.
-    setSetpoint(setpoint);
+    setSetpoint(10.0);
   }
 
   @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
-  
-
-  @Override
-  protected double returnPIDInput() {
-    // Return your input value for the PID loop
-    // e.g. a sensor, like a potentiometer:
-    // yourPot.getAverageVoltage() / kYourMaxVoltage;
-    return 0.0;
+  public void periodic() {
+    useOutput(getMeasurement(), 10.0);
   }
 
   @Override
-  protected void usePIDOutput(double output) {
-    // Use output to drive your system, like a motor
-    // e.g. yourMotor.set(output);
+  public double getMeasurement() {
+    return Robot.driveTrain.getEncoderAvg();
   }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    Robot.driveTrain.curvatureDrive(output, 0.0);
+  }
+
+  public boolean atSetpoint() {
+    return getController().atSetpoint();
+  }
+
+  public void stop() {
+    Robot.driveTrain.curvatureDrive(0.0, 0.0);
+  }
+
 }

@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.commands.DriveAuto;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.controller.PIDController;
 // import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.*;
 
@@ -35,10 +35,14 @@ public class Robot extends TimedRobot {
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
 	public static DriveTrain driveTrain;
+	public static PIDController controller;
+	public static Auto auto;
 	public static Intake intake;
 	public static Shooter shooter;
 	public static OI oi;
 	private Command autonomousCommand;
+	private double kp;
+	private double kd;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -52,10 +56,13 @@ public class Robot extends TimedRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 
 		driveTrain = new DriveTrain();
+		controller = new PIDController(0.5, 0, 0, 0.2);
 		intake = new Intake();
 		shooter = new Shooter();
 		oi = new OI();
-		autonomousCommand = new DriveAuto(1.0, 0.5, 0.5, 0.1, 20);
+		kp = 0.5;
+		kd = 0.01;
+		// autonomousCommand = new DriveAuto(1.0, 0.5, 0.5, 0.1, 20);
 
 		driveTrain.resetEncoders();
 
@@ -92,7 +99,9 @@ public class Robot extends TimedRobot {
 		System.out.println("Auto selected: " + m_autoSelected);
 
 		driveTrain.resetEncoders();
-		if (autonomousCommand != null) autonomousCommand.start();
+		controller.setSetpoint(10.0);
+		auto = new Auto(controller);
+		auto.enable();
 	}
 
 	/**
@@ -114,7 +123,10 @@ public class Robot extends TimedRobot {
 		//clock.start();
 
 		// remember to add scheduler line when this starts
-		Scheduler.getInstance().run();
+		// Scheduler.getInstance().run();
+		// auto.periodic();
+		double thing = (10.0 - Robot.driveTrain.getEncoderAvg()) * kp + (10.0 - (Robot.driveTrain.getEncoderAvg() / 0.02)) * kd;
+		Robot.driveTrain.curvatureDrive(thing * 0.4, 0.0);
 		SmartDashboard.putString("Left Motor Speed", Double.toString(driveTrain.getMasterMotorLeft().get()));
 		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
 		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
@@ -137,7 +149,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
 		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
 		SmartDashboard.putString("Left Encoder", Double.toString(driveTrain.getLeftEncoderDistance()));
-
+		SmartDashboard.putString("stuff", Double.toString(Robot.driveTrain.getEncoderAvg()));
+		// SmartDashboard.putData("PID Controller", auto.getController()); 
 	}
 
 	/**
@@ -145,6 +158,5 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		LiveWindow
 	}
 }

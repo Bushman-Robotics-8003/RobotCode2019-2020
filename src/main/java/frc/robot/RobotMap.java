@@ -22,4 +22,5 @@ public class RobotMap {
 	public static final int leftButtonId = 5;
 	public static final int xButtonId = 3;
 	public static final int yButtonId = 4;
+	public static final int leftArrowButtonId = 7;
 }
