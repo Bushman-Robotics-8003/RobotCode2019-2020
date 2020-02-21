@@ -30,12 +30,7 @@ public class Auto extends PIDSubsystem {
     // setSetpoint() - Sets where the PID controller should move the system
     // to
     // enable() - Enables the PID controller.
-    setSetpoint(10.0);
-  }
-
-  @Override
-  public void periodic() {
-    useOutput(getMeasurement(), 10.0);
+    PIDSubsystem.setSetpoint(10.0);
   }
 
   @Override
@@ -46,6 +41,10 @@ public class Auto extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     Robot.driveTrain.curvatureDrive(output, 0.0);
+  }
+
+  public void setSetpoint(double setpoint) {
+    getController().setSetpoint(setpoint);
   }
 
   public boolean atSetpoint() {

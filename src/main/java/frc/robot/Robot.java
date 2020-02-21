@@ -41,8 +41,6 @@ public class Robot extends TimedRobot {
 	public static Shooter shooter;
 	public static OI oi;
 	private Command autonomousCommand;
-	private double kp;
-	private double kd;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -55,14 +53,10 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Auto choices", m_chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 
-		driveTrain = new DriveTrain();
-		controller = new PIDController(0.5, 0, 0, 0.2);
 		intake = new Intake();
 		shooter = new Shooter();
 		oi = new OI();
-		kp = 0.5;
-		kd = 0.01;
-		// autonomousCommand = new DriveAuto(1.0, 0.5, 0.5, 0.1, 20);
+		autonomousCommand = new DriveAuto();
 
 		driveTrain.resetEncoders();
 
@@ -99,9 +93,7 @@ public class Robot extends TimedRobot {
 		System.out.println("Auto selected: " + m_autoSelected);
 
 		driveTrain.resetEncoders();
-		controller.setSetpoint(10.0);
-		auto = new Auto(controller);
-		auto.enable();
+		autonomousCommand.start();
 	}
 
 	/**
@@ -123,10 +115,7 @@ public class Robot extends TimedRobot {
 		//clock.start();
 
 		// remember to add scheduler line when this starts
-		// Scheduler.getInstance().run();
-		// auto.periodic();
-		double thing = (10.0 - Robot.driveTrain.getEncoderAvg()) * kp + (10.0 - (Robot.driveTrain.getEncoderAvg() / 0.02)) * kd;
-		Robot.driveTrain.curvatureDrive(thing * 0.4, 0.0);
+		Scheduler.getInstance().run();
 		SmartDashboard.putString("Left Motor Speed", Double.toString(driveTrain.getMasterMotorLeft().get()));
 		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
 		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
@@ -149,8 +138,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
 		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
 		SmartDashboard.putString("Left Encoder", Double.toString(driveTrain.getLeftEncoderDistance()));
-		SmartDashboard.putString("stuff", Double.toString(Robot.driveTrain.getEncoderAvg()));
-		// SmartDashboard.putData("PID Controller", auto.getController()); 
 	}
 
 	/**
