@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.commands.DriveAuto;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 // import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.*;
 
@@ -53,12 +54,16 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Auto choices", m_chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 
+		driveTrain = new DriveTrain();
+		auto = new Auto();
 		intake = new Intake();
 		shooter = new Shooter();
 		oi = new OI();
-		autonomousCommand = new DriveAuto();
+		autonomousCommand = new DriveAuto(auto, 100.0);
 
 		driveTrain.resetEncoders();
+
+		SmartDashboard.putNumber("Kp", 0.5);
 
 	}
 
@@ -115,7 +120,11 @@ public class Robot extends TimedRobot {
 		//clock.start();
 
 		// remember to add scheduler line when this starts
+		
+		
+
 		Scheduler.getInstance().run();
+
 		SmartDashboard.putString("Left Motor Speed", Double.toString(driveTrain.getMasterMotorLeft().get()));
 		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
 		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));
@@ -126,6 +135,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		driveTrain.resetEncoders();
+		
 	}
 
 	/**
@@ -145,5 +155,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
 	}
 }

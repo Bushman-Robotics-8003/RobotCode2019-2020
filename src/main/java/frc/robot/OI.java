@@ -2,9 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.RobotMap;
 import frc.robot.commands.*;
-import frc.robot.Robot;
 
 public class OI {
     public Joystick controller = new Joystick(RobotMap.joystickId);

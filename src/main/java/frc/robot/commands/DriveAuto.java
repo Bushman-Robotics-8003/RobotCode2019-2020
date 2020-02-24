@@ -10,34 +10,40 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.Auto;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.controller.PIDController;
 
 public class DriveAuto extends Command {
   /**
    * Creates a new DriveAuto.
    */
 
-  Auto auto;
+  private Auto auto;
+  double setpoint; 
 
-
-  public DriveAuto() {
-    auto = new Auto(new PIDController(0.5, 0, 0));
+  public DriveAuto(Auto auto, double setpoint) {
+    this.auto = auto;
+    this.setpoint = setpoint;
   }
 
   @Override
   protected void initialize() {
-    auto.setSetpoint(10.0);
+    auto.setSetpoint(this.setpoint);
+  }
+
+  @Override
+  protected void execute() {
+    auto.execute(Robot.driveTrain.getEncoderAvg());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return auto.atSetpoint();
+    return auto.done();
   }
 
   @Override
   protected void end() {
     Robot.driveTrain.stopMotors();
+    this.cancel();
   }
 
   @Override

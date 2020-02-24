@@ -7,52 +7,59 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 
 /**
  * Add your docs here.
  */
-public class Auto extends PIDSubsystem {
 
+
+public class Auto extends Subsystem {
   /**
    * Add your docs here.
    */
 
+  private PIDController controller;
+  private double Kp;
+  private double Ki;
+  private double Kd;
 
-  public Auto(PIDController controller) {
-    // Intert a subsystem name and PID values here
-    super(controller);
-
-    // Use these to get going:
-    // setSetpoint() - Sets where the PID controller should move the system
-    // to
-    // enable() - Enables the PID controller.
-    PIDSubsystem.setSetpoint(10.0);
+  public Auto() {
+    Kp = SmartDashboard.getNumber("Kp", 0.7);
+    Ki = 0;
+    Kd = 0;
+    // table = NetworkTable.getPath();
+    // table.beginTransaction();
+    // table.putDouble("speed", 0.5);
+    // table.endTransaction();
+    // Kp = NetworkTable.getTable("SmartDashboard").getDouble("speed");
+    // Ki = NetworkTable.getTable("SmartDashboard").getDouble("speed");
+    // Kd = NetworkTable.getTable("SmartDashboard").getDouble("speed");
+    controller = new PIDController(Kp, Ki, Kd);
   }
 
   @Override
-  public double getMeasurement() {
-    return Robot.driveTrain.getEncoderAvg();
+  protected void initDefaultCommand() {
+    
   }
 
-  @Override
-  protected void useOutput(double output, double setpoint) {
-    Robot.driveTrain.curvatureDrive(output, 0.0);
+  public void execute(double measurement) {
+    Robot.driveTrain.curvatureDrive(controller.calculate(measurement) * 0.6, 0.0);
+  }
+
+  public PIDController getController() {
+    return controller;
   }
 
   public void setSetpoint(double setpoint) {
-    getController().setSetpoint(setpoint);
+    controller.setSetpoint(setpoint);
   }
 
-  public boolean atSetpoint() {
-    return getController().atSetpoint();
+  public boolean done() {
+    return controller.atSetpoint();
   }
-
-  public void stop() {
-    Robot.driveTrain.curvatureDrive(0.0, 0.0);
-  }
-
 }
