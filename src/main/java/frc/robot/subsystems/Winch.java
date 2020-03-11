@@ -14,15 +14,23 @@ import frc.robot.RobotMap;
 /**
  * Add your docs here.
  */
-public class Intake extends Subsystem {
+public class Winch extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private static VictorSP intakeMotor;
-  private double motorSpeed = 1.0;
 
-  public Intake() {
-    intakeMotor = new VictorSP(RobotMap.intakeMotorId);
+  private VictorSP winchMotor1;
+  private VictorSP winchMotor2;
+  private VictorSP liftMotor;
 
+  // TODO determine motor speeds
+  // TODO liftMotorSpeed needs to be negative????
+  private int winchMotorSpeed = -1;
+  private int liftMotorSpeed = -1;
+
+  public Winch() {
+    winchMotor1 = new VictorSP(RobotMap.winchMotor1Id);
+    winchMotor2 = new VictorSP(RobotMap.winchMotor2Id);
+    liftMotor = new VictorSP(RobotMap.liftMotorId);
   }
 
   @Override
@@ -31,15 +39,22 @@ public class Intake extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  public void stopMotor() {
-    intakeMotor.set(0.0);
+  public void pull() {
+    // TODO which needs to be negative????
+    winchMotor1.set(winchMotorSpeed);
+    winchMotor2.set(winchMotorSpeed);
   }
 
-  public void intakeIn() {
-    intakeMotor.set(-motorSpeed);
+  public void lift() {
+    liftMotor.set(liftMotorSpeed);
   }
 
-  public void intakeOut() {
-    intakeMotor.set(motorSpeed);
+  public void stopWinch() {
+    winchMotor1.set(0.0);
+    winchMotor2.set(0.0);
+  }
+
+  public void stopLift() {
+    liftMotor.set(0.0);
   }
 }

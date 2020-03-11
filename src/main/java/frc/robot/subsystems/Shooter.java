@@ -18,9 +18,10 @@ public class Shooter extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private VictorSP shooterMotor;
+  private double motorSpeed = 1.0;
 
   public Shooter() {
-    shooterMotor = new VictorSP(RobotMap.shooterMotor);
+    shooterMotor = new VictorSP(RobotMap.shooterMotorId);
   }
 
   @Override
@@ -34,10 +35,10 @@ public class Shooter extends Subsystem {
   }
 
   public void shoot() {
-    shooterMotor.set(-0.8);
+    shooterMotor.set(motorSpeed);
   }
 
   public void unShoot() {
-    shooterMotor.set(0.8);
+    shooterMotor.set(-motorSpeed);
   }
 }

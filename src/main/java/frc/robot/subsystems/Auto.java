@@ -9,8 +9,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 
 /**
@@ -24,21 +24,15 @@ public class Auto extends Subsystem {
    */
 
   private PIDController controller;
+  // private static AnalogInput sensor = new AnalogInput(RobotMap.UltrasonicPort);
   private double Kp;
   private double Ki;
   private double Kd;
 
   public Auto() {
-    Kp = SmartDashboard.getNumber("Kp", 0.7);
-    Ki = 0;
-    Kd = 0;
-    // table = NetworkTable.getPath();
-    // table.beginTransaction();
-    // table.putDouble("speed", 0.5);
-    // table.endTransaction();
-    // Kp = NetworkTable.getTable("SmartDashboard").getDouble("speed");
-    // Ki = NetworkTable.getTable("SmartDashboard").getDouble("speed");
-    // Kd = NetworkTable.getTable("SmartDashboard").getDouble("speed");
+    Kp = RobotMap.KpValue;
+    Ki = RobotMap.KiValue;
+    Kd = RobotMap.KdValue;
     controller = new PIDController(Kp, Ki, Kd);
   }
 
@@ -48,18 +42,31 @@ public class Auto extends Subsystem {
   }
 
   public void execute(double measurement) {
-    Robot.driveTrain.curvatureDrive(controller.calculate(measurement) * 0.6, 0.0);
+    double leftError = getSetpoint() - Robot.driveTrain.getLeftEncoderDistance();
+    double rightError = getSetpoint() - Robot.driveTrain.getRightEncoderDistance();
+    Robot.driveTrain.setLeftMotors(leftError * Kp);
+    Robot.driveTrain.setRightMotors(rightError * Kp);
+    // Robot.driveTrain.curvatureDrive(controller.calculate(measurement) * 0.8, 0.0);
   }
 
-  public PIDController getController() {
-    return controller;
-  }
+  // public PIDController getController() {
+  //   return controller;
+  // }
 
   public void setSetpoint(double setpoint) {
     controller.setSetpoint(setpoint);
   }
 
+  public double getSetpoint() {
+    return controller.getSetpoint();
+  }
+
   public boolean done() {
     return controller.atSetpoint();
   }
+
+  // public double getUltraSonic() {
+  //   return (sensor.getAverageBits() * 5) / 305; 
+  // }
+
 }

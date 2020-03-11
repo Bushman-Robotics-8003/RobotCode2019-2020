@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +16,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.commands.DriveAuto;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 // import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.*;
 
@@ -36,8 +36,9 @@ public class Robot extends TimedRobot {
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
 	public static DriveTrain driveTrain;
+	public static AnalogInput sensor;
+	public static Winch winch;
 	public static PIDController controller;
-	public static Auto auto;
 	public static Intake intake;
 	public static Shooter shooter;
 	public static OI oi;
@@ -55,15 +56,14 @@ public class Robot extends TimedRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 
 		driveTrain = new DriveTrain();
-		auto = new Auto();
+		sensor = new AnalogInput(0);
+		winch = new Winch();
 		intake = new Intake();
 		shooter = new Shooter();
 		oi = new OI();
-		autonomousCommand = new DriveAuto(auto, 100.0);
+		autonomousCommand = new DriveAuto(10.0);
 
 		driveTrain.resetEncoders();
-
-		SmartDashboard.putNumber("Kp", 0.5);
 
 	}
 
@@ -143,7 +143,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		autonomousCommand.cancel();
 		Scheduler.getInstance().run();
+		SmartDashboard.putString("Ultrasonic Sensor", Double.toString(((sensor.getVoltage() * 5)/0.0048)/305));
 		SmartDashboard.putString("Left Motor Speed", Double.toString(driveTrain.getMasterMotorLeft().get()));
 		SmartDashboard.putString("Right Motor Speed", Double.toString(driveTrain.getMasterMotorRight().get()));
 		SmartDashboard.putString("Right Encoder", Double.toString(driveTrain.getRightEncoderDistance()));

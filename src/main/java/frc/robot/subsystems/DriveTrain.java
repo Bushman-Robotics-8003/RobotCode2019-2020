@@ -71,8 +71,17 @@ public class DriveTrain extends Subsystem {
     drive.curvatureDrive(speed * speedLimiter, turn * turnLimiter, true);
   }
 
+  public void setLeftMotors(double output) {
+    masterMotorLeft.set(output);
+  }
+
+  public void setRightMotors(double output) {
+    masterMotorRight.set(output);
+  }
+
   public void stopMotors() {
-    drive.curvatureDrive(0, 0, true);
+    setLeftMotors(0.0);
+    setRightMotors(0.0);
   }
 
   public WPI_VictorSPX getMasterMotorLeft() {

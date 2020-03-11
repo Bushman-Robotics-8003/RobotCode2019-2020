@@ -8,7 +8,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.Auto;
+import frc.robot.PID;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveAuto extends Command {
@@ -16,34 +16,35 @@ public class DriveAuto extends Command {
    * Creates a new DriveAuto.
    */
 
-  private Auto auto;
-  double setpoint; 
+  
+  private PID controller;
 
-  public DriveAuto(Auto auto, double setpoint) {
-    this.auto = auto;
-    this.setpoint = setpoint;
+  public DriveAuto(double setpoint) {
+    this.controller = new PID(setpoint);
   }
 
   @Override
   protected void initialize() {
-    auto.setSetpoint(this.setpoint);
   }
 
   @Override
   protected void execute() {
-    auto.execute(Robot.driveTrain.getEncoderAvg());
+    double leftOutputSpeed = controller.getLeftOutput();
+    double rightOutputSpeed = controller.getRightOutput();
+
+    Robot.driveTrain.setLeftMotors(leftOutputSpeed);
+    Robot.driveTrain.setRightMotors(-rightOutputSpeed);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return auto.done();
+    return controller.isDone();
   }
 
   @Override
   protected void end() {
     Robot.driveTrain.stopMotors();
-    this.cancel();
   }
 
   @Override
